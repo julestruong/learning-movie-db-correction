@@ -79,6 +79,9 @@ $(function () {
           return;
         }
 
+        console.log(`Il y a ${movies.length} film(s)`);
+        $(".results-count").html(`Il y a ${movies.length} film(s)`);
+
         // dans le cas ou on a des movies :
         displayMovies(movies);
         displayPagination(data.page, data.total_pages);
@@ -134,7 +137,6 @@ $(function () {
         }
       } 
       
-      console.log(currentPage, totalPages);
       paginationToDisplay += currentPage === totalPages ?'' : `<li class="page-item"><a class="page-link" href="#" id="page-${currentPage+1}">Next</a></li>`;
 
 
