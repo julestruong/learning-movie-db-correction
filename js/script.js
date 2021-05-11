@@ -56,17 +56,10 @@ $(function () {
     return;
   };
 
-  let onClickChangePage = function (event) {
-    // pas vu en cours, mais event est intéressant ici.
-    // il permet notamment de récuperer l'id de l'élément sur lequel on a cliqué
-    // pratique pour récuperer le numéro de la page 
-    let page = event.target.id.substr(5);
-    let movieSearched = $searchInput.val();
-    let urlWithQuery = `${URL_API_MOVIE_SEARCH}?api_key=${URL_API_KEY}&query=${movieSearched}&language=fr-FR&page=${page}`;
-
+  let ajaxCall = function(urlWithQuery) {
     $.ajax({
       url: urlWithQuery,
-      success: function (data, textStatus, jqXHR) {
+      success: function (data) {
         $resultsList.empty();
         let movies = data.results;
         
@@ -85,7 +78,17 @@ $(function () {
         displayPagination(data.page, data.total_pages);
       },
     });
+  }
 
+  let onClickChangePage = function (event) {
+    // pas vu en cours, mais event est intéressant ici.
+    // il permet notamment de récuperer l'id de l'élément sur lequel on a cliqué
+    // pratique pour récuperer le numéro de la page 
+    let page = event.target.id.substr(5);
+    let movieSearched = $searchInput.val();
+    let urlWithQuery = `${URL_API_MOVIE_SEARCH}?api_key=${URL_API_KEY}&query=${movieSearched}&language=fr-FR&page=${page}`;
+
+    ajaxCall(urlWithQuery);
   };
 
   let displayPagination = function (currentPage, totalPages) {
@@ -153,27 +156,7 @@ $(function () {
       return;
     }
 
-    $.ajax({
-      url: urlWithQuery,
-      success: function (data, textStatus, jqXHR) {
-        $resultsList.empty();
-        let movies = data.results;
-        
-        if (movies.length === 0) {
-          // on cache l'erreur "champ est vide", au cas ou elle aurait été affiché
-          $errorInputEmpty.addClass("d-none");
-          // on affiche l'erreur "film not found"
-          $errorFilmNotFound.removeClass("d-none");
-          // on ne va pas plus loin, et on n'a pas besoin de retourner quoi
-          // que ce soit, il faut simplement arreter la fonction
-          return;
-        }
-
-        // dans le cas ou on a des movies :
-        displayMovies(movies);
-        displayPagination(data.page, data.total_pages);
-      },
-    });
+    ajaxCall(urlWithQuery);
   };
   $searchButton.click(onClickFunction);
 });
