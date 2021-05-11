@@ -1,6 +1,7 @@
 const URL_API_KEY = "b8e16ff25f44004fe2ab5dedc9e0453e";
 const URL_API_MOVIE_SEARCH = "https://api.themoviedb.org/3/search/movie/";
 const URL_IMAGE_PREFIX = "https://image.tmdb.org/t/p/w200";
+
 $(function () {
   // on crée tous nos sélecteurs d'élement ici, pour
   // les utiliser simplement plus tard.
@@ -9,6 +10,7 @@ $(function () {
   $resultsList = $(".results-list");
   $errorInputEmpty = $(".input-empty");
   $errorFilmNotFound = $(".film-not-found");
+  $pagination= $("#pagination");
 
   /**
    * Cette fonction sera appelée lorsqu'on voudra afficher les films retournées par l'API.
@@ -43,7 +45,6 @@ $(function () {
       movieToDisplay += movie.release_date ? `<p><strong>Date de sortie</strong> : ${movie.release_date} </p>` : "";
       movieToDisplay += movie.overview ? `<p class="synopsis"><strong>Synopsis</strong> : ${movie.overview} </p>`: "";
       movieToDisplay += `</div>`;
-
       movieToDisplay += `<div>`;
       movieToDisplay += movie.poster_path ? `<img src="${URL_IMAGE_PREFIX + movie.poster_path}" alt="image-${movie.id}">` : "";
       movieToDisplay += `</div>`;
@@ -51,7 +52,88 @@ $(function () {
     });
 
     $resultsList.append(movieToDisplay);
+
+    return;
   };
+
+  let onClickChangePage = function (event) {
+    // pas vu en cours, mais event est intéressant ici.
+    // il permet notamment de récuperer l'id de l'élément sur lequel on a cliqué
+    // pratique pour récuperer le numéro de la page 
+    let page = event.target.id.substr(5);
+    let movieSearched = $searchInput.val();
+    let urlWithQuery = `${URL_API_MOVIE_SEARCH}?api_key=${URL_API_KEY}&query=${movieSearched}&language=fr-FR&page=${page}`;
+
+    $.ajax({
+      url: urlWithQuery,
+      success: function (data, textStatus, jqXHR) {
+        $resultsList.empty();
+        let movies = data.results;
+        
+        if (movies.length === 0) {
+          // on cache l'erreur "champ est vide", au cas ou elle aurait été affiché
+          $errorInputEmpty.addClass("d-none");
+          // on affiche l'erreur "film not found"
+          $errorFilmNotFound.removeClass("d-none");
+          // on ne va pas plus loin, et on n'a pas besoin de retourner quoi
+          // que ce soit, il faut simplement arreter la fonction
+          return;
+        }
+
+        // dans le cas ou on a des movies :
+        displayMovies(movies);
+        displayPagination(data.page, data.total_pages);
+      },
+    });
+
+  };
+
+  let displayPagination = function (currentPage, totalPages) {
+    let paginationToDisplay = "";
+
+    if (totalPages <= 1) {
+      // si l'on a qu'une page, inutile d'afficher la pagination
+      return;
+    }
+
+    if (totalPages > 1) {
+      $pagination.empty();
+      paginationToDisplay += `<nav aria-label="Page navigation example">
+                              <ul class="pagination">`
+
+      paginationToDisplay += currentPage > 1 ?`<li class="page-item"><a class="page-link" href="#" id="page-${currentPage-1}">Previous</a></li>` : '';
+
+      if (totalPages <= 10) {
+        for(let i = 1; i <= totalPages; i++) {
+          paginationToDisplay += `<li class="page-item">
+                                  <a class="page-link ${i===currentPage? 'current': ''}" href="#" id="page-${i}">${i}</a>
+                                  </li>`
+        }
+      } else {
+        let initialI = Math.max(1, currentPage - 5)
+        let endI = Math.min(initialI + 9, totalPages);
+        for(let i = initialI; i <= endI ; i++) {
+          paginationToDisplay += `<li class="page-item">
+                                  <a class="page-link ${i===currentPage? 'current': ''}" href="#" id="page-${i}">${i}</a>
+                                  </li>`
+        }
+      } 
+      
+      console.log(currentPage, totalPages);
+      paginationToDisplay += currentPage === totalPages ?'' : `<li class="page-item"><a class="page-link" href="#" id="page-${currentPage+1}">Next</a></li>`;
+
+
+      paginationToDisplay += `</ul>
+                              </nav>`;
+
+
+      $pagination.append(paginationToDisplay);
+      // on n'oublie surtout pas d'ajouter un écouteur d'évènement au clic sur les pages.
+      $(".page-link").click(onClickChangePage);
+    }
+
+    return;
+  }
 
   /**
    * Cette fonction est la callback qui s'exécute lorsqu'on aura cliqué sur le bouton "Lancer la recherche"
@@ -71,13 +153,12 @@ $(function () {
       return;
     }
 
-    console.log(urlWithQuery);
     $.ajax({
       url: urlWithQuery,
       success: function (data, textStatus, jqXHR) {
         $resultsList.empty();
         let movies = data.results;
-
+        
         if (movies.length === 0) {
           // on cache l'erreur "champ est vide", au cas ou elle aurait été affiché
           $errorInputEmpty.addClass("d-none");
@@ -90,6 +171,7 @@ $(function () {
 
         // dans le cas ou on a des movies :
         displayMovies(movies);
+        displayPagination(data.page, data.total_pages);
       },
     });
   };

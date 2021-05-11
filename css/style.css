@@ -20,3 +20,7 @@
   padding-bottom: 8px;
   border-bottom:  1px solid rgb(211, 211, 211);
 }
+
+.page-link.current {
+  font-weight: bold;
+}
