@@ -1,0 +1,12 @@
+.error {
+  color: rgb(218, 126, 126);
+  font-style: italic;
+}
+
+.results-list img {
+  width: 150px;
+}
+
+.results-list p {
+  margin: 0;
+}

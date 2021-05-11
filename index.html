@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exercice</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand ms-4">Exo Bonus Movie DB</a>
+    </nav>
+    <div class="container">
+      <!-- SEARCH FORM -->
+      <div id="search-form" class="row mt-4 col-6 offset-3">
+        <form>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-text">🔎</div>
+              <input
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="Entrez un film"
+              />
+            </div>
+
+            <input
+              class="btn btn-primary mt-2"
+              type="button"
+              id="search-button"
+              value="Lancer la recherche"
+            />
+          </div>
+        </form>
+      </div>
+      <!-- SEARCH MESSAGES IN CASE OF ERROR -->
+      <div class="row mt-4 col-6 offset-3">
+        <p class="error input-empty">Le champ est vide</p>
+        <p class="error film-not-found">Aucun film trouvé</p>
+      </div>
+      <!-- SEARCH RESULTS IN CASE OF ERROR -->
+      <div class="row mt-4 col-6 offset-3">
+        <!-- RESULTS COUNT -->
+        <div class="results-count"></div>
+
+        <!-- RESULTS LIST -->
+        <div class="results-list d-flex">
+          <div>
+            <h3>Titre original</h3>
+            <p><strong>Date de sortie</strong> : 26/02/2021 </p>
+            <p><strong>Synopsis</strong> : <br>
+              Cherry drifts from college dropout to army medic in Iraq -
+              anchored only by his true love, Emily. But after returning from
+              the war with PTSD, his life spirals into drugs and crime as he
+              struggles to find his place in the world.
+            </p>
+          </div>
+          <div>
+            <img
+              src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/pwDvkDyaHEU9V7cApQhbcSJMG1w.jpg"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- RESULT PAGINATION -->
+      <div class="row mt-4 col-6 offset-3"></div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
