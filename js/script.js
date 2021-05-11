@@ -56,6 +56,12 @@ $(function () {
     return;
   };
 
+  /**
+   * Cette fonction exécute l'appel ajax.
+   * Elle prend en parametre l'url qu'elle doit requeter.
+   * 
+   * @param {*} urlWithQuery 
+   */
   let ajaxCall = function(urlWithQuery) {
     $.ajax({
       url: urlWithQuery,
@@ -80,6 +86,12 @@ $(function () {
     });
   }
 
+  /**
+   * Cette fonction est la callback de l'event listener du clic sur un lien de pagination
+   * En d'autres termes, elle s'exécute lorsqu'on clique sur une autre page.
+   * 
+   * @param {*} event 
+   */
   let onClickChangePage = function (event) {
     // pas vu en cours, mais event est intéressant ici.
     // il permet notamment de récuperer l'id de l'élément sur lequel on a cliqué
