@@ -5,8 +5,18 @@
 
 .results-list img {
   width: 150px;
+  margin-left: 8px;
 }
 
 .results-list p {
   margin: 0;
+}
+
+.results-list .synopsis {
+  font-size: 14px;
+}
+
+.movie {
+  padding-bottom: 8px;
+  border-bottom:  1px solid rgb(211, 211, 211);
 }
